@@ -123,6 +123,30 @@
         .links a:hover::after {
             opacity: 1;
         }
+        .nav-buttons {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 2;
+        }
+        .nav-buttons a {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: 2px solid #ff4b4b;
+            color: #ff4b4b;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s ease, background 0.3s ease;
+            font-family: 'FutureLightItalic', sans-serif;
+        }
+        .nav-buttons a:hover {
+            transform: translateY(-5px);
+            background: #ff4b4b;
+            color: black;
+        }
         @keyframes float {
             0%, 100% {
                 transform: translateY(0px);
@@ -134,12 +158,15 @@
     </style>
 </head>
 <body>
-    <canvas id="background"></canvas>
-
     <div class="volume-container">
         <i class="fas fa-volume-up mute-button" id="mute-button"></i>
         <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
         <div class="volume-label">Volume Changer</div>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="about.html">About</a>
+        <a href="roadmap.html">Roadmap</a>
     </div>
 
     <div class="content">
@@ -148,10 +175,91 @@
         <div class="links">
             <a href="about.html" title="About"><i class="fas fa-info-circle"></i></a>
             <a href="roadmap.html" title="Roadmap"><i class="fas fa-map"></i></a>
-            <a href="https://twitter.com" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="https://telegram.org" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
+            <a href="https://x.com/desolubai" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://t.me/desolubaicoin" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
         </div>
     </div>
 
+    <canvas id="background"></canvas>
+
     <script>
-        const canvas
+        const canvas = document.getElementById('background');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let strands = [];
+        const strandCount = 50;
+        const strandColor = 'rgba(255, 75, 75, 0.7)';
+        const maxDistance = 150;
+
+        for (let i = 0; i < strandCount; i++) {
+            strands.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < strands.length; i++) {
+                const strand = strands[i];
+                strand.x += strand.vx;
+                strand.y += strand.vy;
+
+                if (strand.x < 0 || strand.x > canvas.width) strand.vx *= -1;
+                if (strand.y < 0 || strand.y > canvas.height) strand.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(strand.x, strand.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = strandColor;
+                ctx.fill();
+
+                for (let j = i + 1; j < strands.length; j++) {
+                    const otherStrand = strands[j];
+                    const dist = Math.hypot(strand.x - otherStrand.x, strand.y - otherStrand.y);
+                    if (dist < maxDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(strand.x, strand.y);
+                        ctx.lineTo(otherStrand.x, otherStrand.y);
+                        ctx.strokeStyle = strandColor;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Audio handling
+        const audio = new Audio('bliss - lofi hip hop beat (FREE FOR PROFIT USE).mp3');
+        audio.loop = true;
+        audio.volume = 0.5;
+        audio.play();
+
+        const volumeSlider = document.getElementById('volume-slider');
+        const muteButton = document.getElementById('mute-button');
+        let isMuted = false;
+
+        volumeSlider.addEventListener('input', () => {
+            audio.volume = volumeSlider.value;
+        });
+
+        muteButton.addEventListener('click', () => {
+            isMuted = !isMuted;
+            audio.muted = isMuted;
+            muteButton.className = isMuted ? 'fas fa-volume-mute mute-button' : 'fas fa-volume-up mute-button';
+        });
+    </script>
+</body>
+</html>
