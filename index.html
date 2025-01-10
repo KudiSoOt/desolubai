@@ -130,7 +130,7 @@
     </video>
 
     <div class="volume-container">
-        <i class="fas fa-volume-mute mute-button" id="mute-button"></i>
+        <i class="fas fa-volume-up mute-button" id="mute-button"></i>
         <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
         <div class="volume-label">Volume Changer</div>
     </div>
@@ -151,8 +151,9 @@
         const muteButton = document.getElementById('mute-button');
         let isMuted = false;
 
-        // Set initial volume
+        // Set initial volume and unmute video
         video.volume = volumeSlider.value;
+        video.muted = false;
 
         // Update video volume based on slider
         volumeSlider.addEventListener('input', () => {
@@ -172,6 +173,11 @@
         function updateMuteButton() {
             muteButton.className = isMuted ? 'fas fa-volume-mute mute-button' : 'fas fa-volume-up mute-button';
         }
+
+        // Play video with audio after user interaction if autoplay is blocked
+        document.body.addEventListener('click', () => {
+            video.play().catch(err => console.log('Video play error:', err));
+        });
     </script>
 </body>
 </html>
