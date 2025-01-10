@@ -245,7 +245,12 @@
         const audio = new Audio('bliss - lofi hip hop beat (FREE FOR PROFIT USE).mp3');
         audio.loop = true;
         audio.volume = 0.5;
+        audio.play().catch(() => {
+    document.body.addEventListener('click', () => {
         audio.play();
+    }, { once: true });
+});
+
 
         const volumeSlider = document.getElementById('volume-slider');
         const muteButton = document.getElementById('mute-button');
