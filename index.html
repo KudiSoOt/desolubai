@@ -32,25 +32,36 @@
             text-align: center;
         }
         .logo {
-            width: 150px;
+            width: 200px;
             height: auto;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px red);
+            margin-bottom: 30px;
         }
         .links {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 40px;
             margin-top: 20px;
         }
         .links a {
-            color: #ff0000;
-            font-size: 32px;
+            color: #ff4b4b;
+            font-size: 40px;
             text-decoration: none;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease, color 0.3s ease;
         }
         .links a:hover {
             transform: scale(1.2);
+            color: #ff9999;
+        }
+        .links a i {
+            animation: float 3s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
     </style>
 </head>
@@ -69,5 +80,27 @@
             <a href="https://telegram.org" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
         </div>
     </div>
+
+    <audio id="background-audio" loop>
+        <source src="INZO - Overthinker.mp4" type="audio/mp4">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Try to play audio immediately and prompt for permission if needed
+        window.addEventListener('load', function() {
+            const audio = document.getElementById('background-audio');
+            audio.play().catch(() => {
+                console.log('Audio autoplay blocked. Waiting for user interaction.');
+            });
+
+            // Fallback: Play audio on user click if autoplay is blocked
+            document.body.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play().catch(err => console.log('Audio play error:', err));
+                }
+            });
+        });
+    </script>
 </body>
 </html>
