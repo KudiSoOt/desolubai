@@ -77,15 +77,15 @@
             position: relative;
         }
         .coin-name {
-            font-size: 38px;
+            font-size: 48px;
             font-weight: bold;
             color: #ff4b4b;
             text-shadow: 0 0 15px rgba(255, 75, 75, 1), 0 0 30px rgba(255, 75, 75, 0.8);
             margin-bottom: 10px;
-            animation: float 3s infinite ease-in-out;
+            animation: float 3s infinite ease-in-out, pulse 2s infinite;
         }
         .logo {
-            width: 220px;
+            width: 260px;
             height: auto;
             margin-bottom: 15px;
             animation: float 3s infinite ease-in-out;
@@ -141,9 +141,10 @@
             border-radius: 5px;
             transition: transform 0.3s ease, background 0.3s ease;
             font-family: 'FutureLightItalic', sans-serif;
+            animation: float 3s infinite ease-in-out;
         }
         .nav-buttons a:hover {
-            transform: translateY(-5px);
+            transform: scale(1.2);
             background: #ff4b4b;
             color: black;
         }
@@ -169,6 +170,14 @@
             }
             50% {
                 transform: translateY(-8px);
+            }
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
             }
         }
     </style>
