@@ -147,6 +147,22 @@
             background: #ff4b4b;
             color: black;
         }
+        .solana-price {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            color: #ff4b4b;
+            border: 2px solid #ff4b4b;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-family: 'FutureLightItalic', sans-serif;
+            transition: transform 0.3s ease;
+            animation: float 3s infinite ease-in-out;
+        }
+        .solana-price:hover {
+            transform: scale(1.2);
+        }
         @keyframes float {
             0%, 100% {
                 transform: translateY(0px);
@@ -179,6 +195,8 @@
             <a href="https://t.me/desolubaicoin" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
         </div>
     </div>
+
+    <div class="solana-price" id="solana-price">SOL: Loading...</div>
 
     <canvas id="background"></canvas>
 
@@ -245,12 +263,7 @@
         const audio = new Audio('bliss - lofi hip hop beat (FREE FOR PROFIT USE).mp3');
         audio.loop = true;
         audio.volume = 0.5;
-        audio.play().catch(() => {
-    document.body.addEventListener('click', () => {
         audio.play();
-    }, { once: true });
-});
-
 
         const volumeSlider = document.getElementById('volume-slider');
         const muteButton = document.getElementById('mute-button');
@@ -265,6 +278,22 @@
             audio.muted = isMuted;
             muteButton.className = isMuted ? 'fas fa-volume-mute mute-button' : 'fas fa-volume-up mute-button';
         });
+
+        // Fetch Solana price
+        async function fetchSolanaPrice() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd');
+                const data = await response.json();
+                const price = data.solana.usd.toFixed(2);
+                document.getElementById('solana-price').innerText = `SOL: $${price}`;
+            } catch (error) {
+                console.error('Error fetching Solana price:', error);
+            }
+        }
+
+        // Update price every second
+        fetchSolanaPrice();
+        setInterval(fetchSolanaPrice, 1000);
     </script>
 </body>
 </html>
