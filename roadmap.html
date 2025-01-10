@@ -3,181 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roadmap - DESOLUBAI</title>
+    <title>Roadmap | DESOLUBAI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        @font-face {
+            font-family: 'FutureLight';
+            src: url('FutureLight-BW15w.ttf') format('truetype');
+        }
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Future Light', sans-serif;
-            background-color: #0d0d0d;
-            overflow: hidden;
-        }
-        .container {
-            text-align: center;
-            color: #ff4d4d;
-            margin-top: 60px;
+            padding: 20px;
+            font-family: 'FutureLight', sans-serif;
+            background: black;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-y: auto; /* Ensures scrolling */
         }
         h1 {
-            font-size: 48px;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px #ff4d4d;
+            font-size: 60px;
+            color: #ff4b4b;
+            text-shadow: 0 0 20px rgba(255, 75, 75, 1), 0 0 40px rgba(255, 75, 75, 0.8);
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
         }
-        .box {
-            border: 2px solid #ff4d4d;
+        .roadmap-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 900px;
+            width: 100%;
+            z-index: 2; /* Keeps content above the canvas */
+        }
+        .phase-box {
+            background: rgba(255, 75, 75, 0.1);
+            border: 2px solid rgba(255, 75, 75, 0.6);
             border-radius: 15px;
             padding: 20px;
-            margin: 20px auto;
-            max-width: 800px;
-            background: rgba(255, 77, 77, 0.05);
-            box-shadow: 0 0 15px rgba(255, 77, 77, 0.5);
-            position: relative;
+            text-align: left;
+            box-shadow: 0 0 15px rgba(255, 75, 75, 0.3);
+            font-size: 22px;
+            line-height: 1.8;
+            animation: float 3s ease-in-out infinite;
         }
-        .box:hover {
-            transform: translateY(-5px);
-            transition: transform 0.3s ease;
+        .phase-box h2 {
+            font-size: 30px;
+            color: #ff4b4b;
+            margin-bottom: 10px;
         }
-        .back-button {
-            display: inline-block;
-            padding: 10px 20px;
-            color: #ff4d4d;
-            border: 2px solid #ff4d4d;
-            border-radius: 5px;
+        .phase-box p {
+            font-size: 22px;
+            line-height: 1.8;
+        }
+        .back-link {
+            margin-top: 30px;
+            color: #ff4b4b;
+            font-size: 24px;
             text-decoration: none;
-            margin-top: 20px;
-            font-size: 18px;
-            text-transform: uppercase;
+            border: 2px solid #ff4b4b;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s ease, color 0.3s ease;
+            z-index: 2;
+            animation: float 3s ease-in-out infinite;
         }
-        .back-button:hover {
-            background-color: #ff4d4d;
-            color: #0d0d0d;
-        }
-        .volume-slider-container {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .volume-slider-container input[type="range"] {
-            width: 150px;
-        }
-        .volume-slider-container span {
-            color: #ff4d4d;
-            font-size: 16px;
+        .back-link:hover {
+            background: #ff4b4b;
+            color: #0b0b0b;
         }
         canvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: 0; /* Ensures canvas stays behind content */
+        }
+        .volume-container {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .volume-container input[type="range"] {
+            width: 150px;
+            accent-color: #ff4b4b;
+        }
+        .volume-container label {
+            font-size: 18px;
+            color: #ff4b4b;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
     </style>
 </head>
 <body>
-    <div class="volume-slider-container">
-        <i class="fas fa-volume-up"></i>
-        <input id="volume-slider" type="range" min="0" max="1" step="0.1" value="0.5">
-        <span>VOLUME CHANGER</span>
+    <div class="volume-container">
+        <i id="mute-btn" class="fas fa-volume-up" style="cursor: pointer; color: #ff4b4b;"></i>
+        <input id="volume-slider" type="range" min="0" max="1" step="0.01">
+        <label for="volume-slider">VOLUME CHANGER</label>
     </div>
 
-    <div class="container">
-        <h1>Roadmap</h1>
-
-        <div class="box">
+    <h1>DESOLUBAI Roadmap</h1>
+    <div class="roadmap-container">
+        <div class="phase-box">
             <h2>Phase 1: Launch & Community Growth</h2>
             <p>DESOLUBAI will kick off with a strong launch campaign that includes community-driven events, strategic partnerships, and initial token giveaways. Our goal is to establish an engaged and supportive community on key platforms like Twitter, Telegram, and Discord, ensuring everyone stays informed and involved.</p>
         </div>
-
-        <div class="box">
+        <div class="phase-box">
             <h2>Phase 2: Partnerships & Ecosystem Expansion</h2>
             <p>Collaborate with other crypto projects for cross-promotion. Introduce staking or holding rewards to incentivize long-term holders. Build trust through transparent updates and begin working on a simple utility like an NFT collection.</p>
         </div>
-
-        <div class="box">
+        <div class="phase-box">
             <h2>Phase 3: Advanced Utility Development</h2>
-            <p>Develop and launch a utility feature such as a DeFi tool, meme platform, or marketplace. Involve the community in feature ideas and testing. Release the first version of DESOLUBAI's decentralized application (dApp).</p>
+            <p>Develop and launch a utility feature such as a DeFi tool, meme platform, or marketplace. Involve the community in feature ideas and testing. Release the first version of DESOLUBAI’s decentralized application (dApp).</p>
         </div>
-
-        <div class="box">
+        <div class="phase-box">
             <h2>Phase 4: Long-Term Vision & Governance</h2>
             <p>Establish a community-driven governance system with DAO-style voting. Expand partnerships with established blockchain projects. Host live events and AMA sessions, and explore multi-chain support for the token.</p>
         </div>
-
-        <a href="index.html" class="back-button">← Back to Home</a>
     </div>
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
 
-    <!-- Background Animation Script -->
+    <canvas id="background"></canvas>
+
     <script>
-        // Audio handling
-        const audio = new Audio('bliss.mp3');
+        const canvas = document.getElementById('background');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let strands = [];
+        const strandCount = 50;
+        const strandColor = 'rgba(255, 75, 75, 0.7)';
+        const maxDistance = 150;
+
+        for (let i = 0; i < strandCount; i++) {
+            strands.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < strands.length; i++) {
+                const strand = strands[i];
+                strand.x += strand.vx;
+                strand.y += strand.vy;
+
+                if (strand.x < 0 || strand.x > canvas.width) strand.vx *= -1;
+                if (strand.y < 0 || strand.y > canvas.height) strand.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(strand.x, strand.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = strandColor;
+                ctx.fill();
+
+                for (let j = i + 1; j < strands.length; j++) {
+                    const otherStrand = strands[j];
+                    const dist = Math.hypot(strand.x - otherStrand.x, strand.y - otherStrand.y);
+                    if (dist < maxDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(strand.x, strand.y);
+                        ctx.lineTo(otherStrand.x, otherStrand.y);
+                        ctx.strokeStyle = strandColor;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Background audio control
+        const audio = new Audio('bliss - lofi hip hop beat (FREE FOR PROFIT USE).mp3');
         audio.loop = true;
         audio.volume = 0.5;
         audio.play();
 
         const volumeSlider = document.getElementById('volume-slider');
+        const muteBtn = document.getElementById('mute-btn');
+
+        volumeSlider.value = audio.volume;
         volumeSlider.addEventListener('input', (e) => {
             audio.volume = e.target.value;
         });
 
-        // Background animation logic (same as before)
-        const canvas = document.createElement('canvas');
-        document.body.appendChild(canvas);
-        const ctx = canvas.getContext('2d');
-
-        let particlesArray = [];
-        const numParticles = 100;
-
-        function initParticles() {
-            particlesArray = [];
-            for (let i = 0; i < numParticles; i++) {
-                particlesArray.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    radius: Math.random() * 3 + 1,
-                    color: '#ff4d4d',
-                    speedX: (Math.random() - 0.5) * 2,
-                    speedY: (Math.random() - 0.5) * 2,
-                });
-            }
-        }
-
-        function drawParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particlesArray.forEach((particle) => {
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-                ctx.fillStyle = particle.color;
-                ctx.fill();
-            });
-        }
-
-        function animateParticles() {
-            particlesArray.forEach((particle) => {
-                particle.x += particle.speedX;
-                particle.y += particle.speedY;
-
-                if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
-                if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
-            });
-
-            drawParticles();
-            requestAnimationFrame(animateParticles);
-        }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            initParticles();
+        muteBtn.addEventListener('click', () => {
+            audio.muted = !audio.muted;
+            muteBtn.className = audio.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
         });
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        initParticles();
-        animateParticles();
     </script>
 </body>
 </html>
