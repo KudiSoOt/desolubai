@@ -14,27 +14,28 @@
             margin: 0;
             padding: 0;
             font-family: 'FutureLight', sans-serif;
-            background: #0b0b0b;
+            background: black;
             color: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            overflow: hidden;
             text-align: center;
         }
         h1 {
-            font-size: 50px;
+            font-size: 60px;
             color: #ff4b4b;
-            text-shadow: 0 0 15px rgba(255, 75, 75, 0.8);
+            text-shadow: 0 0 20px rgba(255, 75, 75, 1), 0 0 40px rgba(255, 75, 75, 0.8);
             margin-bottom: 20px;
         }
         .roadmap-container {
-            max-width: 800px;
+            max-width: 900px;
             text-align: left;
         }
         .phase {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         .phase h2 {
             font-size: 30px;
@@ -42,12 +43,12 @@
             margin-bottom: 10px;
         }
         .phase p {
-            font-size: 18px;
-            line-height: 1.6;
+            font-size: 22px;
+            line-height: 1.8;
         }
         .back-link {
             color: #ff4b4b;
-            font-size: 20px;
+            font-size: 24px;
             text-decoration: none;
             border: 2px solid #ff4b4b;
             padding: 10px 20px;
@@ -57,6 +58,14 @@
         .back-link:hover {
             background: #ff4b4b;
             color: #0b0b0b;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
     </style>
 </head>
@@ -77,5 +86,69 @@
         </div>
     </div>
     <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+
+    <canvas id="background"></canvas>
+
+    <script>
+        const canvas = document.getElementById('background');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let strands = [];
+        const strandCount = 50;
+        const strandColor = 'rgba(255, 75, 75, 0.7)';
+        const maxDistance = 150;
+
+        for (let i = 0; i < strandCount; i++) {
+            strands.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < strands.length; i++) {
+                const strand = strands[i];
+                strand.x += strand.vx;
+                strand.y += strand.vy;
+
+                if (strand.x < 0 || strand.x > canvas.width) strand.vx *= -1;
+                if (strand.y < 0 || strand.y > canvas.height) strand.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(strand.x, strand.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = strandColor;
+                ctx.fill();
+
+                for (let j = i + 1; j < strands.length; j++) {
+                    const otherStrand = strands[j];
+                    const dist = Math.hypot(strand.x - otherStrand.x, strand.y - otherStrand.y);
+                    if (dist < maxDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(strand.x, strand.y);
+                        ctx.lineTo(otherStrand.x, otherStrand.y);
+                        ctx.strokeStyle = strandColor;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
 </body>
 </html>
