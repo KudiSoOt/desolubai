@@ -75,25 +75,25 @@
         .content {
             text-align: center;
         }
-        .logo {
-            width: 200px;
-            height: auto;
-            margin-bottom: 20px;
-            animation: float 3s infinite ease-in-out;
-        }
         .coin-name {
-            font-size: 40px;
+            font-size: 38px;
             font-weight: bold;
             color: #ff4b4b;
             text-shadow: 0 0 15px rgba(255, 75, 75, 1), 0 0 30px rgba(255, 75, 75, 0.8);
-            margin-bottom: -10px;
+            margin-bottom: 10px;
+            animation: float 3s infinite ease-in-out;
+        }
+        .logo {
+            width: 220px;
+            height: auto;
+            margin-bottom: 15px;
             animation: float 3s infinite ease-in-out;
         }
         .links {
             display: flex;
             justify-content: center;
             gap: 40px;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         .links a {
             color: #ff4b4b;
@@ -101,6 +101,7 @@
             text-decoration: none;
             position: relative;
             transition: transform 0.3s ease, color 0.3s ease;
+            animation: float 3s infinite ease-in-out;
         }
         .links a:hover {
             transform: scale(1.2);
@@ -126,7 +127,7 @@
                 transform: translateY(0px);
             }
             50% {
-                transform: translateY(-10px);
+                transform: translateY(-8px);
             }
         }
     </style>
