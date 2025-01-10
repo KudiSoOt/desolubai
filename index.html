@@ -187,33 +187,55 @@
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        const coinWord = "DESOLUBAI";
 
-        function drawScene() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let strands = [];
+        const strandCount = 50;
+        const strandColor = 'rgba(255, 75, 75, 0.7)';
+        const maxDistance = 150;
 
-            // Draw grass using letters
-            for (let i = 0; i < canvas.width; i += 20) {
-                const letter = coinWord[Math.floor(Math.random() * coinWord.length)];
-                ctx.font = "20px FutureLight";
-                ctx.fillStyle = "#ff4b4b";
-                ctx.fillText(letter, i, canvas.height - 20);
-            }
-
-            // Draw flowers and trees with letters
-            for (let i = 0; i < 10; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * (canvas.height - 100);
-                const letter = coinWord[Math.floor(Math.random() * coinWord.length)];
-                ctx.font = "30px FutureLight";
-                ctx.fillStyle = "#ff4b4b";
-                ctx.fillText(letter, x, y);
-            }
-
-            requestAnimationFrame(drawScene);
+        for (let i = 0; i < strandCount; i++) {
+            strands.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+            });
         }
 
-        drawScene();
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < strands.length; i++) {
+                const strand = strands[i];
+                strand.x += strand.vx;
+                strand.y += strand.vy;
+
+                if (strand.x < 0 || strand.x > canvas.width) strand.vx *= -1;
+                if (strand.y < 0 || strand.y > canvas.height) strand.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(strand.x, strand.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = strandColor;
+                ctx.fill();
+
+                for (let j = i + 1; j < strands.length; j++) {
+                    const otherStrand = strands[j];
+                    const dist = Math.hypot(strand.x - otherStrand.x, strand.y - otherStrand.y);
+                    if (dist < maxDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(strand.x, strand.y);
+                        ctx.lineTo(otherStrand.x, otherStrand.y);
+                        ctx.strokeStyle = strandColor;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
