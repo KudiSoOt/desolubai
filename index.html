@@ -124,7 +124,7 @@
     </style>
 </head>
 <body>
-    <video autoplay loop muted id="background-video">
+    <video autoplay loop id="background-video">
         <source src="INZO - Overthinker.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -145,32 +145,17 @@
         </div>
     </div>
 
-    <audio id="background-audio" loop>
-        <source src="INZO - Overthinker.mp4" type="audio/mp4">
-        Your browser does not support the audio element.
-    </audio>
-
     <script>
-        const audio = document.getElementById('background-audio');
         const video = document.getElementById('background-video');
         const volumeSlider = document.getElementById('volume-slider');
         const muteButton = document.getElementById('mute-button');
         let isMuted = false;
 
         // Set initial volume
-        audio.volume = volumeSlider.value;
         video.volume = volumeSlider.value;
 
-        // Play audio on user interaction if autoplay is blocked
-        document.body.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play().catch(err => console.log('Audio play error:', err));
-            }
-        });
-
-        // Update audio and video volume based on slider
+        // Update video volume based on slider
         volumeSlider.addEventListener('input', () => {
-            audio.volume = volumeSlider.value;
             video.volume = volumeSlider.value;
             isMuted = volumeSlider.value === '0';
             updateMuteButton();
@@ -179,7 +164,6 @@
         // Toggle mute on button click
         muteButton.addEventListener('click', () => {
             isMuted = !isMuted;
-            audio.muted = isMuted;
             video.muted = isMuted;
             updateMuteButton();
         });
