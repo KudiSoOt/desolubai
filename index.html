@@ -7,10 +7,18 @@
     <title>DESOLUBAI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        @font-face {
+            font-family: 'FutureLight';
+            src: url('FutureLight-BW15w.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'FutureLightItalic';
+            src: url('FutureLightItalic-1GeEv.ttf') format('truetype');
+        }
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'FutureLight', sans-serif;
             background: black;
             overflow: hidden;
             display: flex;
@@ -28,6 +36,42 @@
             object-fit: cover;
             z-index: -1;
         }
+        .volume-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .volume-slider {
+            appearance: none;
+            width: 150px;
+            height: 5px;
+            background: #ff4b4b;
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #ff4b4b;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .mute-button {
+            font-size: 24px;
+            color: #ff4b4b;
+            cursor: pointer;
+        }
+        .volume-label {
+            font-size: 14px;
+            color: #ff9999;
+            text-align: center;
+            font-family: 'FutureLightItalic', sans-serif;
+        }
         .content {
             text-align: center;
         }
@@ -35,6 +79,7 @@
             width: 200px;
             height: auto;
             margin-bottom: 30px;
+            animation: float 3s infinite ease-in-out;
         }
         .links {
             display: flex;
@@ -46,14 +91,27 @@
             color: #ff4b4b;
             font-size: 40px;
             text-decoration: none;
+            position: relative;
             transition: transform 0.3s ease, color 0.3s ease;
         }
         .links a:hover {
             transform: scale(1.2);
             color: #ff9999;
         }
-        .links a i {
-            animation: float 3s infinite ease-in-out;
+        .links a::after {
+            content: attr(title);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: #ff9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-family: 'FutureLightItalic', sans-serif;
+        }
+        .links a:hover::after {
+            opacity: 1;
         }
         @keyframes float {
             0%, 100% {
@@ -66,10 +124,16 @@
     </style>
 </head>
 <body>
-    <video autoplay loop muted>
+    <video autoplay loop muted id="background-video">
         <source src="INZO - Overthinker.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+
+    <div class="volume-container">
+        <i class="fas fa-volume-mute mute-button" id="mute-button"></i>
+        <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
+        <div class="volume-label">Volume Changer</div>
+    </div>
 
     <div class="content">
         <img src="token-logo.png" alt="DESOLUBAI Token" class="logo">
@@ -87,20 +151,43 @@
     </audio>
 
     <script>
-        // Try to play audio immediately and prompt for permission if needed
-        window.addEventListener('load', function() {
-            const audio = document.getElementById('background-audio');
-            audio.play().catch(() => {
-                console.log('Audio autoplay blocked. Waiting for user interaction.');
-            });
+        const audio = document.getElementById('background-audio');
+        const video = document.getElementById('background-video');
+        const volumeSlider = document.getElementById('volume-slider');
+        const muteButton = document.getElementById('mute-button');
+        let isMuted = false;
 
-            // Fallback: Play audio on user click if autoplay is blocked
-            document.body.addEventListener('click', function() {
-                if (audio.paused) {
-                    audio.play().catch(err => console.log('Audio play error:', err));
-                }
-            });
+        // Set initial volume
+        audio.volume = volumeSlider.value;
+        video.volume = volumeSlider.value;
+
+        // Play audio on user interaction if autoplay is blocked
+        document.body.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().catch(err => console.log('Audio play error:', err));
+            }
         });
+
+        // Update audio and video volume based on slider
+        volumeSlider.addEventListener('input', () => {
+            audio.volume = volumeSlider.value;
+            video.volume = volumeSlider.value;
+            isMuted = volumeSlider.value === '0';
+            updateMuteButton();
+        });
+
+        // Toggle mute on button click
+        muteButton.addEventListener('click', () => {
+            isMuted = !isMuted;
+            audio.muted = isMuted;
+            video.muted = isMuted;
+            updateMuteButton();
+        });
+
+        // Update mute button icon
+        function updateMuteButton() {
+            muteButton.className = isMuted ? 'fas fa-volume-mute mute-button' : 'fas fa-volume-up mute-button';
+        }
     </script>
 </body>
 </html>
