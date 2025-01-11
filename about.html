@@ -29,6 +29,19 @@
             margin-bottom: 30px;
             animation: float 3s ease-in-out infinite;
         }
+        .countdown-container {
+            font-size: 50px;
+            color: #ff4b4b;
+            text-shadow: 0 0 15px rgba(255, 75, 75, 1), 0 0 30px rgba(255, 75, 75, 0.8);
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+            text-align: center;
+        }
+        .countdown-container:hover {
+            transform: scale(1.2);
+            color: #ff9999;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
         .about-section {
             max-width: 900px;
             width: 100%;
@@ -101,6 +114,9 @@
         <input id="volume-slider" type="range" min="0" max="1" step="0.01">
         <label for="volume-slider">VOLUME CHANGER</label>
     </div>
+
+    <!-- Countdown Timer -->
+    <div class="countdown-container" id="countdown"></div>
 
     <h1>About DESOLUBAI</h1>
 
@@ -204,6 +220,31 @@
             audio.muted = !audio.muted;
             muteBtn.className = audio.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
         });
+
+        // Countdown Timer Logic
+        const dropDate = new Date();
+        dropDate.setDate(dropDate.getDate() + 1);
+        dropDate.setHours(19, 0, 0, 0); // 7 PM tomorrow
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = dropDate - now;
+
+            if (distance <= 0) {
+                document.getElementById('countdown').innerHTML = "DROP LIVE!";
+                clearInterval(countdownInterval);
+                return;
+            }
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerHTML = `${hours}h : ${minutes}m : ${seconds}s`;
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call to display countdown immediately
     </script>
 </body>
 </html>
